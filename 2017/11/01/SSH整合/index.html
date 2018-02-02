@@ -1,0 +1,820 @@
+<!DOCTYPE html>
+
+
+
+  
+
+
+<html class="theme-next gemini use-motion" lang="zh-Hans">
+<head>
+  <meta charset="UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+<meta name="theme-color" content="#222">
+
+
+
+
+
+
+
+
+
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css" />
+
+<link href="/css/main.css?v=6.0.3" rel="stylesheet" type="text/css" />
+
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png?v=6.0.3">
+
+
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png?v=6.0.3">
+
+
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png?v=6.0.3">
+
+
+  <link rel="mask-icon" href="/images/logo.svg?v=6.0.3" color="#222">
+
+
+
+
+
+
+
+
+
+<script type="text/javascript" id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Gemini',
+    version: '6.0.3',
+    sidebar: {"position":"left","display":"post","offset":12,"b2t":false,"scrollpercent":false,"onmobile":false},
+    fancybox: false,
+    fastclick: false,
+    lazyload: false,
+    tabs: true,
+    motion: {"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+  
+
+
+
+
+  
+  <meta name="keywords" content="Hexo, NexT" />
+
+
+<meta name="description" content="SSH整合整合理论 spring负责action spring负责sessionFactory、session spring负责aop事务  导包struts2-spring-plugin.jar一旦导入，那么struts2一旦启动就会去寻找spring容器，找不到则抛出异常。 整合spring到web 主配置文件的创建与约束 在web.xml中配置ContextLoaderListener并">
+<meta property="og:type" content="article">
+<meta property="og:title" content="SSH 整合">
+<meta property="og:url" content="http://yoursite.com/2017/11/01/SSH整合/index.html">
+<meta property="og:site_name" content="learningByDoing">
+<meta property="og:description" content="SSH整合整合理论 spring负责action spring负责sessionFactory、session spring负责aop事务  导包struts2-spring-plugin.jar一旦导入，那么struts2一旦启动就会去寻找spring容器，找不到则抛出异常。 整合spring到web 主配置文件的创建与约束 在web.xml中配置ContextLoaderListener并">
+<meta property="og:locale" content="zh-Hans">
+<meta property="og:updated_time" content="2018-02-02T13:28:42.000Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="SSH 整合">
+<meta name="twitter:description" content="SSH整合整合理论 spring负责action spring负责sessionFactory、session spring负责aop事务  导包struts2-spring-plugin.jar一旦导入，那么struts2一旦启动就会去寻找spring容器，找不到则抛出异常。 整合spring到web 主配置文件的创建与约束 在web.xml中配置ContextLoaderListener并">
+
+
+
+
+
+
+  <link rel="canonical" href="http://yoursite.com/2017/11/01/SSH整合/"/>
+
+
+
+<script type="text/javascript" id="page.configurations">
+  CONFIG.page = {
+    sidebar: "",
+  };
+</script>
+  <title>SSH 整合 | learningByDoing</title>
+  
+
+
+
+
+
+
+
+
+
+  <noscript>
+  <style type="text/css">
+    .use-motion .motion-element,
+    .use-motion .brand,
+    .use-motion .menu-item,
+    .sidebar-inner,
+    .use-motion .post-block,
+    .use-motion .pagination,
+    .use-motion .comments,
+    .use-motion .post-header,
+    .use-motion .post-body,
+    .use-motion .collection-title { opacity: initial; }
+
+    .use-motion .logo,
+    .use-motion .site-title,
+    .use-motion .site-subtitle {
+      opacity: initial;
+      top: initial;
+    }
+
+    .use-motion {
+      .logo-line-before i { left: initial; }
+      .logo-line-after i { right: initial; }
+    }
+  </style>
+</noscript>
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="zh-Hans">
+
+  
+  
+    
+  
+
+  <div class="container sidebar-position-left page-post-detail">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"> <div class="site-brand-wrapper">
+  <div class="site-meta ">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/"  class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">learningByDoing</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+      
+        <p class="site-subtitle"></p>
+      
+  </div>
+
+  <div class="site-nav-toggle">
+    <button>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/" rel="section">
+            <i class="menu-item-icon fa fa-fw fa-home"></i> <br />Home</a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-categories">
+          <a href="/categories/" rel="section">
+            <i class="menu-item-icon fa fa-fw fa-th"></i> <br />Categories</a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives/" rel="section">
+            <i class="menu-item-icon fa fa-fw fa-archive"></i> <br />Archives</a>
+        </li>
+      
+
+      
+    </ul>
+  
+
+  
+</nav>
+
+
+  
+
+
+
+ </div>
+    </header>
+
+    
+
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2017/11/01/SSH整合/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="h#">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/avatar.jpg">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="learningByDoing">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">SSH 整合</h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">Posted on</span>
+              
+              <time title="Post created" itemprop="dateCreated datePublished" datetime="2017-11-01T00:00:00+08:00">2017-11-01</time>
+            
+
+            
+            
+
+            
+          </span>
+
+          
+            <span class="post-category" >
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">In</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing"><a href="/categories/JavaWeb/" itemprop="url" rel="index"><span itemprop="name">JavaWeb</span></a></span>
+
+                
+                
+                  , 
+                
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing"><a href="/categories/JavaWeb/SSH框架/" itemprop="url" rel="index"><span itemprop="name">SSH框架</span></a></span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <h1 id="SSH整合"><a href="#SSH整合" class="headerlink" title="SSH整合"></a>SSH整合</h1><h2 id="整合理论"><a href="#整合理论" class="headerlink" title="整合理论"></a>整合理论</h2><ol>
+<li>spring负责action</li>
+<li>spring负责sessionFactory、session</li>
+<li>spring负责aop事务</li>
+</ol>
+<h2 id="导包"><a href="#导包" class="headerlink" title="导包"></a>导包</h2><p>struts2-spring-plugin.jar一旦导入，那么struts2一旦启动就会去寻找spring容器，找不到则抛出异常。</p>
+<h2 id="整合spring到web"><a href="#整合spring到web" class="headerlink" title="整合spring到web"></a>整合spring到web</h2><ol>
+<li>主配置文件的创建与约束</li>
+<li>在web.xml中配置ContextLoaderListener并指定配置文件位置让spring随项目启动而启动</li>
+</ol>
+<h2 id="整合struts2到web"><a href="#整合struts2到web" class="headerlink" title="整合struts2到web"></a>整合struts2到web</h2><ol>
+<li>主配置文件的创建与约束</li>
+<li>在web.xml中配置struts2的核心过滤器StrutsPrepareAndExecuteFilter</li>
+</ol>
+<h2 id="整合spring和struts2"><a href="#整合spring和struts2" class="headerlink" title="整合spring和struts2"></a>整合spring和struts2</h2><ol>
+<li><p>配置action的bean元素</p>
+<p><strong>注意：</strong>千万记得配置ACTION时它的scope属性要为prototype</p>
+</li>
+<li><p>配置struts2常量</p>
+<ol>
+<li><code>&lt;constant name=&quot;struts.objectFactory&quot; value=&quot;spring&quot;</code>将对象（ACTION）的创建交给spring容器</li>
+<li><code>&lt;constant name=&quot;struts.objectFactory.spring.autoWire&quot; value=&quot;name&quot;</code>spring负责自动注入action中的依赖，不用额外配置，默认就已经配置了。按name属性来注入依赖。</li>
+</ol>
+</li>
+<li><p>若struts2配置中action的class属性为完整类名，则struts2负责action的创建，spring负责action中属性的自动注入，属于半整合，不推荐使用</p>
+</li>
+<li><p>struts2配置中action的class属性为spring配置中对应的bean的name属性，这样就完全由spring管理action的生命周期，包括创建。但这样就要手动注入属性。推荐使用。</p>
+</li>
+</ol>
+<h2 id="整合hibernate到Web"><a href="#整合hibernate到Web" class="headerlink" title="整合hibernate到Web"></a>整合hibernate到Web</h2><ol>
+<li>书写orm元数据</li>
+<li>主配置文件的创建与约束</li>
+</ol>
+<h2 id="整合spring和hibernate"><a href="#整合spring和hibernate" class="headerlink" title="整合spring和hibernate"></a>整合spring和hibernate</h2><ol>
+<li><p>配置SessionFactory配置到spring容器中</p>
+<p><code>&lt;bean name=&quot;sessionFactory class=&quot;org.springframework.orm.hibernate5.LocalSessionFactoryBean&quot;&gt;&lt;/bean&gt;</code></p>
+</li>
+<li><p>加载SessionFactory的配置，即Configuration</p>
+<ol>
+<li><p>仍然使用外部的hibernate.cfg.xml:<code>&lt;property name=&quot;configLocation&quot; value=&quot;classpath:hibernate.cfg.xml&quot;&gt;&lt;/property&gt;</code>不推荐</p>
+</li>
+<li><p>将原本hibernate.cfg.xml中的配置放到spring中加载：</p>
+<figure class="highlight html"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><span class="line"><span class="tag">&lt;<span class="name">bean</span> <span class="attr">name</span>=<span class="string">"sessionFactory"</span> <span class="attr">class</span>=<span class="string">"org.springframework.orm.hibernate5.LocalSessionFactoryBean"</span>&gt;</span></span><br><span class="line">		<span class="tag">&lt;<span class="name">property</span> <span class="attr">name</span>=<span class="string">"hibernateProperties"</span>&gt;</span></span><br><span class="line">			<span class="tag">&lt;<span class="name">props</span>&gt;</span></span><br><span class="line">				<span class="tag">&lt;<span class="name">prop</span> <span class="attr">key</span>=<span class="string">"hibernate.connection.driver_class"</span>&gt;</span>com.mysql.jdbc.Driver<span class="tag">&lt;/<span class="name">prop</span>&gt;</span></span><br><span class="line">				<span class="tag">&lt;<span class="name">prop</span> <span class="attr">key</span>=<span class="string">"hibernate.connection.url"</span>&gt;</span>jdbc:mysql:///cst<span class="tag">&lt;/<span class="name">prop</span>&gt;</span></span><br><span class="line">				<span class="tag">&lt;<span class="name">prop</span> <span class="attr">key</span>=<span class="string">"hibernate.connection.username"</span>&gt;</span>root<span class="tag">&lt;/<span class="name">prop</span>&gt;</span></span><br><span class="line">				<span class="tag">&lt;<span class="name">prop</span> <span class="attr">key</span>=<span class="string">"hibernate.connection.password"</span>&gt;</span>WZhe941127<span class="tag">&lt;/<span class="name">prop</span>&gt;</span></span><br><span class="line">				<span class="tag">&lt;<span class="name">prop</span> <span class="attr">key</span>=<span class="string">"hibernate.dialect"</span>&gt;</span>org.hibernate.dialect.MySQLDialect<span class="tag">&lt;/<span class="name">prop</span>&gt;</span></span><br><span class="line">				</span><br><span class="line">				<span class="tag">&lt;<span class="name">prop</span> <span class="attr">key</span>=<span class="string">"hibernate.show_sql"</span>&gt;</span>true<span class="tag">&lt;/<span class="name">prop</span>&gt;</span></span><br><span class="line">				<span class="tag">&lt;<span class="name">prop</span> <span class="attr">key</span>=<span class="string">"hibernate.format_sql"</span>&gt;</span>true<span class="tag">&lt;/<span class="name">prop</span>&gt;</span></span><br><span class="line">				<span class="tag">&lt;<span class="name">prop</span> <span class="attr">key</span>=<span class="string">"hibernate.hbm2ddl.auto"</span>&gt;</span>update<span class="tag">&lt;/<span class="name">prop</span>&gt;</span></span><br><span class="line">			<span class="tag">&lt;/<span class="name">props</span>&gt;</span></span><br><span class="line">		<span class="tag">&lt;/<span class="name">property</span>&gt;</span></span><br><span class="line">		<span class="tag">&lt;<span class="name">property</span> <span class="attr">name</span>=<span class="string">"mappingDirectoryLocations"</span> <span class="attr">value</span>=<span class="string">"classpath:domain"</span>&gt;</span><span class="tag">&lt;/<span class="name">property</span>&gt;</span></span><br><span class="line">	<span class="tag">&lt;/<span class="name">bean</span>&gt;</span></span><br></pre></td></tr></table></figure>
+</li>
+</ol>
+</li>
+</ol>
+<h2 id="spring整合c3p0连接池"><a href="#spring整合c3p0连接池" class="headerlink" title="spring整合c3p0连接池"></a>spring整合c3p0连接池</h2><ol>
+<li>配置db.properties</li>
+<li>引入连接池到spring</li>
+<li>将连接池注入给SessionFactory</li>
+</ol>
+<h2 id="HibernateTemplate模板对象操作数据库"><a href="#HibernateTemplate模板对象操作数据库" class="headerlink" title="HibernateTemplate模板对象操作数据库"></a>HibernateTemplate模板对象操作数据库</h2><p>与jdbc模板相似，daoImpl继承HibernateDaoSupport。在方法中用到模板对象时就<code>getHibernateTemplate()</code></p>
+<p>在配置daoImpl时，要注入sessionFactory，sessionFactory中已经注入了dataSource</p>
+<h2 id="spring的aop事务"><a href="#spring的aop事务" class="headerlink" title="spring的aop事务"></a>spring的aop事务</h2><ol>
+<li><p>配置核心事务管理器</p>
+<figure class="highlight html"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="tag">&lt;<span class="name">bean</span> <span class="attr">name</span>=<span class="string">"transactionManager"</span> <span class="attr">class</span>=<span class="string">"org.springframework.orm.hibernate5.HibernateTransactionManager"</span>&gt;</span></span><br><span class="line">		<span class="tag">&lt;<span class="name">property</span> <span class="attr">name</span>=<span class="string">"sessionFactory"</span> <span class="attr">ref</span>=<span class="string">"sessionFactory"</span>&gt;</span><span class="tag">&lt;/<span class="name">property</span>&gt;</span></span><br><span class="line">	<span class="tag">&lt;/<span class="name">bean</span>&gt;</span></span><br></pre></td></tr></table></figure>
+</li>
+<li><p>配置事务模板对象（可以没有？？）</p>
+<figure class="highlight html"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="tag">&lt;<span class="name">bean</span> <span class="attr">name</span>=<span class="string">"transactionTemplate"</span> <span class="attr">class</span>=<span class="string">"org.springframework.transaction.support.TransactionTemplate"</span>&gt;</span></span><br><span class="line">		<span class="tag">&lt;<span class="name">property</span> <span class="attr">name</span>=<span class="string">"transactionManager"</span> <span class="attr">ref</span>=<span class="string">"transactionManager"</span>&gt;</span><span class="tag">&lt;/<span class="name">property</span>&gt;</span></span><br><span class="line">	<span class="tag">&lt;/<span class="name">bean</span>&gt;</span></span><br></pre></td></tr></table></figure>
+</li>
+<li><p>配置通知</p>
+<figure class="highlight html"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line"><span class="tag">&lt;<span class="name">tx:advice</span> <span class="attr">id</span>=<span class="string">"txadvice"</span> <span class="attr">transaction-manager</span>=<span class="string">"transactionManager"</span>&gt;</span></span><br><span class="line">		<span class="tag">&lt;<span class="name">tx:attributes</span>&gt;</span></span><br><span class="line">			<span class="comment">&lt;!-- 八大常用方法通配符 --&gt;</span></span><br><span class="line">			<span class="tag">&lt;<span class="name">tx:method</span> <span class="attr">name</span>=<span class="string">"save*"</span> <span class="attr">isolation</span>=<span class="string">"REPEATABLE_READ"</span> <span class="attr">propagation</span>=<span class="string">"REQUIRED"</span> <span class="attr">read-only</span>=<span class="string">"false"</span>/&gt;</span></span><br><span class="line">			<span class="tag">&lt;<span class="name">tx:method</span> <span class="attr">name</span>=<span class="string">"persist*"</span> <span class="attr">isolation</span>=<span class="string">"REPEATABLE_READ"</span> <span class="attr">propagation</span>=<span class="string">"REQUIRED"</span> <span class="attr">read-only</span>=<span class="string">"false"</span>/&gt;</span></span><br><span class="line">			<span class="tag">&lt;<span class="name">tx:method</span> <span class="attr">name</span>=<span class="string">"delete*"</span> <span class="attr">isolation</span>=<span class="string">"REPEATABLE_READ"</span> <span class="attr">propagation</span>=<span class="string">"REQUIRED"</span> <span class="attr">read-only</span>=<span class="string">"false"</span>/&gt;</span></span><br><span class="line">			<span class="tag">&lt;<span class="name">tx:method</span> <span class="attr">name</span>=<span class="string">"remove*"</span> <span class="attr">isolation</span>=<span class="string">"REPEATABLE_READ"</span> <span class="attr">propagation</span>=<span class="string">"REQUIRED"</span> <span class="attr">read-only</span>=<span class="string">"false"</span>/&gt;</span></span><br><span class="line">			<span class="tag">&lt;<span class="name">tx:method</span> <span class="attr">name</span>=<span class="string">"update*"</span> <span class="attr">isolation</span>=<span class="string">"REPEATABLE_READ"</span> <span class="attr">propagation</span>=<span class="string">"REQUIRED"</span> <span class="attr">read-only</span>=<span class="string">"false"</span>/&gt;</span></span><br><span class="line">			<span class="tag">&lt;<span class="name">tx:method</span> <span class="attr">name</span>=<span class="string">"modify*"</span> <span class="attr">isolation</span>=<span class="string">"REPEATABLE_READ"</span> <span class="attr">propagation</span>=<span class="string">"REQUIRED"</span> <span class="attr">read-only</span>=<span class="string">"false"</span>/&gt;</span></span><br><span class="line">			<span class="tag">&lt;<span class="name">tx:method</span> <span class="attr">name</span>=<span class="string">"get*"</span> <span class="attr">isolation</span>=<span class="string">"REPEATABLE_READ"</span> <span class="attr">propagation</span>=<span class="string">"REQUIRED"</span> <span class="attr">read-only</span>=<span class="string">"true"</span>/&gt;</span></span><br><span class="line">			<span class="tag">&lt;<span class="name">tx:method</span> <span class="attr">name</span>=<span class="string">"find*"</span> <span class="attr">isolation</span>=<span class="string">"REPEATABLE_READ"</span> <span class="attr">propagation</span>=<span class="string">"REQUIRED"</span> <span class="attr">read-only</span>=<span class="string">"true"</span>/&gt;</span></span><br><span class="line">		<span class="tag">&lt;/<span class="name">tx:attributes</span>&gt;</span></span><br><span class="line">	<span class="tag">&lt;/<span class="name">tx:advice</span>&gt;</span></span><br></pre></td></tr></table></figure>
+</li>
+<li><p>将通知织入目标对象</p>
+<figure class="highlight html"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="tag">&lt;<span class="name">aop:config</span>&gt;</span></span><br><span class="line">		<span class="tag">&lt;<span class="name">aop:pointcut</span> <span class="attr">expression</span>=<span class="string">"execution(* service.impl.*Service.Impl.*(..))"</span> <span class="attr">id</span>=<span class="string">"txpc"</span>/&gt;</span></span><br><span class="line">		<span class="tag">&lt;<span class="name">aop:advisor</span> <span class="attr">advice-ref</span>=<span class="string">"txadvice"</span> <span class="attr">pointcut-ref</span>=<span class="string">"txpc"</span>/&gt;</span></span><br><span class="line">	<span class="tag">&lt;/<span class="name">aop:config</span>&gt;</span></span><br></pre></td></tr></table></figure>
+</li>
+</ol>
+<h2 id="扩大session作用范围"><a href="#扩大session作用范围" class="headerlink" title="扩大session作用范围"></a>扩大session作用范围</h2><p>避免使用懒加载时出现NoSession问题，需要在web.xml中用Filter扩大其作用范围</p>
+<figure class="highlight html"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">&lt;!-- 字面意识就是使session在view层也保持打开 --&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">filter</span>&gt;</span></span><br><span class="line">  	<span class="tag">&lt;<span class="name">filter-name</span>&gt;</span>openSessionInView<span class="tag">&lt;/<span class="name">filter-name</span>&gt;</span></span><br><span class="line">  	<span class="tag">&lt;<span class="name">filter-class</span>&gt;</span>org.springframework.orm.hibernate5.support.OpenSessionInViewFilter<span class="tag">&lt;/<span class="name">filter-class</span>&gt;</span></span><br><span class="line">  <span class="tag">&lt;/<span class="name">filter</span>&gt;</span></span><br><span class="line">  <span class="tag">&lt;<span class="name">filter-mapping</span>&gt;</span></span><br><span class="line">  	<span class="tag">&lt;<span class="name">filter-name</span>&gt;</span>openSessionInView<span class="tag">&lt;/<span class="name">filter-name</span>&gt;</span></span><br><span class="line">  	<span class="tag">&lt;<span class="name">url-pattern</span>&gt;</span>/*<span class="tag">&lt;/<span class="name">url-pattern</span>&gt;</span></span><br><span class="line">  <span class="tag">&lt;/<span class="name">filter-mapping</span>&gt;</span></span><br></pre></td></tr></table></figure>
+<p><strong>注意：</strong>所有的过滤器都要保证放在struts2过滤器的前面，因为struts2过滤器不会放行。</p>
+
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+
+      
+      
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2017/11/01/struts2/" rel="next" title="struts2">
+                <i class="fa fa-chevron-left"></i> struts2
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+              <a href="/2017/11/01/自动装箱与拆箱、==与equals/" rel="prev" title="装箱拆箱、==与equals">
+                装箱拆箱、==与equals <i class="fa fa-chevron-right"></i>
+              </a>
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
+
+
+          </div>
+          
+
+  
+
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap">
+            Table of Contents
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview-wrap">
+            Overview
+          </li>
+        </ul>
+      
+
+      <section class="site-overview-wrap sidebar-panel">
+        <div class="site-overview">
+          <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+            
+              <img class="site-author-image" itemprop="image"
+                src="/images/avatar.jpg"
+                alt="h#" />
+            
+              <p class="site-author-name" itemprop="name">h#</p>
+              <p class="site-description motion-element" itemprop="description">所学即所得</p>
+          </div>
+
+          
+            <nav class="site-state motion-element">
+              
+                <div class="site-state-item site-state-posts">
+                
+                  <a href="/archives/">
+                
+                    <span class="site-state-item-count">32</span>
+                    <span class="site-state-item-name">posts</span>
+                  </a>
+                </div>
+              
+
+              
+                
+                
+                <div class="site-state-item site-state-categories">
+                  <a href="/categories/index.html">
+                    
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                    <span class="site-state-item-count">8</span>
+                    <span class="site-state-item-name">categories</span>
+                  </a>
+                </div>
+              
+
+              
+            </nav>
+          
+
+          
+
+          
+
+          
+          
+
+          
+          
+
+          
+            
+          
+          
+
+        </div>
+      </section>
+
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#SSH整合"><span class="nav-number">1.</span> <span class="nav-text">SSH整合</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#整合理论"><span class="nav-number">1.1.</span> <span class="nav-text">整合理论</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#导包"><span class="nav-number">1.2.</span> <span class="nav-text">导包</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#整合spring到web"><span class="nav-number">1.3.</span> <span class="nav-text">整合spring到web</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#整合struts2到web"><span class="nav-number">1.4.</span> <span class="nav-text">整合struts2到web</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#整合spring和struts2"><span class="nav-number">1.5.</span> <span class="nav-text">整合spring和struts2</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#整合hibernate到Web"><span class="nav-number">1.6.</span> <span class="nav-text">整合hibernate到Web</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#整合spring和hibernate"><span class="nav-number">1.7.</span> <span class="nav-text">整合spring和hibernate</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#spring整合c3p0连接池"><span class="nav-number">1.8.</span> <span class="nav-text">spring整合c3p0连接池</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#HibernateTemplate模板对象操作数据库"><span class="nav-number">1.9.</span> <span class="nav-text">HibernateTemplate模板对象操作数据库</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#spring的aop事务"><span class="nav-number">1.10.</span> <span class="nav-text">spring的aop事务</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#扩大session作用范围"><span class="nav-number">1.11.</span> <span class="nav-text">扩大session作用范围</span></a></li></ol></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
+      
+
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright">&copy; <span itemprop="copyrightYear">2018</span>
+  <span class="with-love">
+    <i class="fa fa-user"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">h#</span>
+
+  
+
+  
+</div>
+
+
+
+
+  <div class="powered-by">Powered by <a class="theme-link" target="_blank" href="https://hexo.io">Hexo</a></div>
+
+
+
+  <span class="post-meta-divider">|</span>
+
+
+
+  <div class="theme-info">Theme &mdash; <a class="theme-link" target="_blank" href="https://github.com/theme-next/hexo-theme-next">NexT.Gemini</a> v6.0.3</div>
+
+
+
+
+        
+
+
+
+
+
+
+
+        
+      </div>
+    </footer>
+
+    
+      <div class="back-to-top">
+        <i class="fa fa-arrow-up"></i>
+        
+      </div>
+    
+
+    
+
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery/index.js?v=2.1.3"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+  
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=6.0.3"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=6.0.3"></script>
+
+
+
+  
+  
+
+
+  <script type="text/javascript" src="/js/src/affix.js?v=6.0.3"></script>
+
+  <script type="text/javascript" src="/js/src/schemes/pisces.js?v=6.0.3"></script>
+
+
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=6.0.3"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=6.0.3"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=6.0.3"></script>
+
+
+
+  
+
+
+
+	
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+  
+
+  
+
+  
+
+  
+  
+
+  
+
+  
+
+  
+
+  
+
+</body>
+</html>
