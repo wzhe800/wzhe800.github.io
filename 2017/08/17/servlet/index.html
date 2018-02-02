@@ -1,0 +1,824 @@
+<!DOCTYPE html>
+
+
+
+  
+
+
+<html class="theme-next gemini use-motion" lang="zh-Hans">
+<head>
+  <meta charset="UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+<meta name="theme-color" content="#222">
+
+
+
+
+
+
+
+
+
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css" />
+
+<link href="/css/main.css?v=6.0.3" rel="stylesheet" type="text/css" />
+
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png?v=6.0.3">
+
+
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png?v=6.0.3">
+
+
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png?v=6.0.3">
+
+
+  <link rel="mask-icon" href="/images/logo.svg?v=6.0.3" color="#222">
+
+
+
+
+
+
+
+
+
+<script type="text/javascript" id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Gemini',
+    version: '6.0.3',
+    sidebar: {"position":"left","display":"post","offset":12,"b2t":false,"scrollpercent":false,"onmobile":false},
+    fancybox: false,
+    fastclick: false,
+    lazyload: false,
+    tabs: true,
+    motion: {"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+  
+
+
+
+
+  
+  <meta name="keywords" content="Hexo, NexT" />
+
+
+<meta name="description" content="Servlet接口所有的servlet都要实现Servlet接口，其中有三个非常重要的方法：  init(ServletConfig):第一次调用（tomcat服务器第一次创建Servlet实例）时执行 service(ServletRequest,ServeltResponse):每一次调用(tomcat服务器每一次创建Servlet实例）时执行 destory():服务器关闭或项目移除时执行">
+<meta property="og:type" content="article">
+<meta property="og:title" content="servlet">
+<meta property="og:url" content="http://yoursite.com/2017/08/17/servlet/index.html">
+<meta property="og:site_name" content="learningByDoing">
+<meta property="og:description" content="Servlet接口所有的servlet都要实现Servlet接口，其中有三个非常重要的方法：  init(ServletConfig):第一次调用（tomcat服务器第一次创建Servlet实例）时执行 service(ServletRequest,ServeltResponse):每一次调用(tomcat服务器每一次创建Servlet实例）时执行 destory():服务器关闭或项目移除时执行">
+<meta property="og:locale" content="zh-Hans">
+<meta property="og:updated_time" content="2018-02-02T13:00:55.000Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="servlet">
+<meta name="twitter:description" content="Servlet接口所有的servlet都要实现Servlet接口，其中有三个非常重要的方法：  init(ServletConfig):第一次调用（tomcat服务器第一次创建Servlet实例）时执行 service(ServletRequest,ServeltResponse):每一次调用(tomcat服务器每一次创建Servlet实例）时执行 destory():服务器关闭或项目移除时执行">
+
+
+
+
+
+
+  <link rel="canonical" href="http://yoursite.com/2017/08/17/servlet/"/>
+
+
+
+<script type="text/javascript" id="page.configurations">
+  CONFIG.page = {
+    sidebar: "",
+  };
+</script>
+  <title>servlet | learningByDoing</title>
+  
+
+
+
+
+
+
+
+
+
+  <noscript>
+  <style type="text/css">
+    .use-motion .motion-element,
+    .use-motion .brand,
+    .use-motion .menu-item,
+    .sidebar-inner,
+    .use-motion .post-block,
+    .use-motion .pagination,
+    .use-motion .comments,
+    .use-motion .post-header,
+    .use-motion .post-body,
+    .use-motion .collection-title { opacity: initial; }
+
+    .use-motion .logo,
+    .use-motion .site-title,
+    .use-motion .site-subtitle {
+      opacity: initial;
+      top: initial;
+    }
+
+    .use-motion {
+      .logo-line-before i { left: initial; }
+      .logo-line-after i { right: initial; }
+    }
+  </style>
+</noscript>
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="zh-Hans">
+
+  
+  
+    
+  
+
+  <div class="container sidebar-position-left page-post-detail">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"> <div class="site-brand-wrapper">
+  <div class="site-meta ">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/"  class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">learningByDoing</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+      
+        <p class="site-subtitle"></p>
+      
+  </div>
+
+  <div class="site-nav-toggle">
+    <button>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/" rel="section">
+            <i class="menu-item-icon fa fa-fw fa-home"></i> <br />Home</a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-categories">
+          <a href="/categories/" rel="section">
+            <i class="menu-item-icon fa fa-fw fa-th"></i> <br />Categories</a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives/" rel="section">
+            <i class="menu-item-icon fa fa-fw fa-archive"></i> <br />Archives</a>
+        </li>
+      
+
+      
+    </ul>
+  
+
+  
+</nav>
+
+
+  
+
+
+
+ </div>
+    </header>
+
+    
+
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2017/08/17/servlet/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="h#">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/avatar.jpg">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="learningByDoing">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">servlet</h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">Posted on</span>
+              
+              <time title="Post created" itemprop="dateCreated datePublished" datetime="2017-08-17T00:00:00+08:00">2017-08-17</time>
+            
+
+            
+            
+
+            
+          </span>
+
+          
+            <span class="post-category" >
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">In</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing"><a href="/categories/JavaWeb基础/" itemprop="url" rel="index"><span itemprop="name">JavaWeb基础</span></a></span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <h1 id="Servlet接口"><a href="#Servlet接口" class="headerlink" title="Servlet接口"></a>Servlet接口</h1><p>所有的servlet都要实现Servlet接口，其中有三个非常重要的方法：</p>
+<ol>
+<li>init(ServletConfig):第一次调用（tomcat服务器第一次创建Servlet实例）时执行</li>
+<li>service(ServletRequest,ServeltResponse):每一次调用(tomcat服务器每一次创建Servlet实例）时执行</li>
+<li>destory():服务器关闭或项目移除时执行</li>
+</ol>
+<h1 id="web-xml相关配置"><a href="#web-xml相关配置" class="headerlink" title="web.xml相关配置"></a>web.xml相关配置</h1><ol>
+<li>在<servlet></servlet>标签中可添加<load-on-startup>number标签对。  number为一个正整数，整数越小，被创建时的优先级越高。</load-on-startup></li>
+<li>在<servlet></servlet>标签中可添加<init-param></init-param>标签对。此为初始参数，要放在servlet-class的后面。</li>
+<li>url-pattern的配置：有完全路径匹配（以/开始）、目录匹配（以/开始，以*结束）、扩展名匹配（以*开始，加后缀）、缺省路径（只有/）四种。</li>
+<li>配置文件中的元素获取顺序：url-pattern、servlet-name(mapping中的)、servlet-name(servlet中的)、servlet-class</li>
+</ol>
+<h1 id="目录相关"><a href="#目录相关" class="headerlink" title="目录相关"></a>目录相关</h1><p>跟tomcat服务器相关的内容，都是放在WebContent文件夹中。WebContent文件夹相当于tomcat文件夹中的webapps。</p>
+<p>build文件夹相当于webapps/WEB-INF/classes文件夹。每当在src中建立任何文件，build中都会copy一份，同样，classes文件夹中也会copy一份。注意src与tomcat文件夹一点关系也没有，tomcat只需要copy src中的class。</p>
+<p>其它任何与WebContent同级的文件，都是不可见的。因此任何与项目有关的文件，都要exist在WebContent.</p>
+<h1 id="基本编写步骤"><a href="#基本编写步骤" class="headerlink" title="基本编写步骤"></a>基本编写步骤</h1><p>创建HttpServlet的继承类，重写doGet和doPost方法。</p>
+<p>每次访问都执行doGet或doPost方法，因为在其父类或爷类中，已经将service方法的执行转变成了这两个。具体可见源码。</p>
+<h1 id="ServletConfig"><a href="#ServletConfig" class="headerlink" title="ServletConfig"></a>ServletConfig</h1><p>针对每个Servlet，都会有一个ServletConfig对象。常用API：</p>
+<ol>
+<li>getServletName()：获取当前Servlet在xml中配置的name值</li>
+<li>getInitParam(String)：获取当前Servlet的初始化参数</li>
+</ol>
+<h1 id="ServletContext"><a href="#ServletContext" class="headerlink" title="ServletContext"></a>ServletContext</h1><p>服务器启动时，为每个WEB应用（针对的是webapps文件夹，不是WebContent目录）创建一个单独的ServletContext对象，可以用其存取全局（在整个WEB应用范围的）数据。</p>
+<pre><code>ServletContext context = this.getServletContext()  //创建ServletContext实例
+ServletContext context = ServletConfig.getServletContext()  //创建ServletContext实例
+</code></pre><p>ServletContext有三种功能。</p>
+<h2 id="对整个web项目设置初始化数据"><a href="#对整个web项目设置初始化数据" class="headerlink" title="对整个web项目设置初始化数据"></a>对整个web项目设置初始化数据</h2><p>可以用<context-param></context-param>标签对来设置全局参数</p>
+<h2 id="可以在多个servlet之间共享数据-重要"><a href="#可以在多个servlet之间共享数据-重要" class="headerlink" title="可以在多个servlet之间共享数据(重要)"></a>可以在多个servlet之间共享数据(重要)</h2><ol>
+<li>setAttribute(String name, Object object):存放数据</li>
+<li>getAttribute(String name):读取数据</li>
+<li>removeAttribute(String name):移除数据</li>
+</ol>
+<h2 id="可以获得当前web项目中的指定资源-文件-重要"><a href="#可以获得当前web项目中的指定资源-文件-重要" class="headerlink" title="可以获得当前web项目中的指定资源(文件)(重要)"></a>可以获得当前web项目中的指定资源(文件)(重要)</h2><p>API：String getRealPath(String path):返回文件的绝对路径。path是指相对于webapps的路径。若不能得到绝对路径则返回null。</p>
+<p>（扩展）还有一种获得绝对路径的方法：用类加载器<br>​<br>    类.class.getClassLoader().getResource(String path).getPath();</p>
+<p>注意：这里的path不是相对于webapps的路径，而是相对于src的路径。</p>
+<h1 id="ServletResponse-Response"><a href="#ServletResponse-Response" class="headerlink" title="ServletResponse(Response)"></a>ServletResponse(Response)</h1><h2 id="Response工作原理"><a href="#Response工作原理" class="headerlink" title="Response工作原理"></a>Response工作原理</h2><p>Response拥有一个缓冲区，service(或doGet)方法结束后，tomcat服务器会自动从缓冲区中获取内容，组装成一个http响应发送给客户端。如Response.getWriter().write()就是把文本写入缓冲区，而不是直接写给客户端。</p>
+<h2 id="常用API"><a href="#常用API" class="headerlink" title="常用API"></a>常用API</h2><ol>
+<li>setstatus(int):设置状态码，如303</li>
+<li>addHeader(String name, String value):在响应头中添加字段</li>
+<li>setHeader(String name, String value):在响应头中设置字段</li>
+<li>sendRedirect(String path):跳转。此path相对于webapps</li>
+<li>setContentType(“text/html;charset=UTF-8”):设置网页文本的编码</li>
+<li>getWriter().write()：往客户端写文本</li>
+</ol>
+<h2 id="下载文件"><a href="#下载文件" class="headerlink" title="下载文件"></a>下载文件</h2><ol>
+<li>首先通过<code>request.getparameter()</code>得到filename</li>
+<li>再<code>filename = new String(filename.getBytes(&quot;ISO8859-1&quot;),&quot;UTF-8&quot;)</code>来防止中文文件名出现乱码</li>
+<li>告知浏览器文件的类型:<code>response.setContentType(this.getServletContext().getMimeType(filename))</code></li>
+<li>告知浏览器文件的打开方式是下载:<code>response.addHeader(&quot;Content-Disposition&quot;, &quot;attachment;filename=&quot; + filenameEncoded)</code></li>
+<li>获取文件绝对路径：<code>String path = this.getServletContext().getRealPath(&quot;download/&quot;+filename);</code></li>
+<li>然后就是拷贝的模板，只是这里的OutputStream是通过response.getOutputStream()获得。</li>
+</ol>
+<p>注意：第四步中的filenameEncoded对象，是针对不同浏览器对下载的文件名称filename进行了不同的编码。</p>
+<h2 id="验证码"><a href="#验证码" class="headerlink" title="验证码"></a>验证码</h2><p>需要有验证码Servlet以及验证码序列的txt文件。</p>
+<p>将验证码图片(img)中设置的属性src指向验证码Servlet便可。</p>
+<p>若要实现点击变换验证码，则要加上js语句。</p>
+<h1 id="ServletRequest-Request"><a href="#ServletRequest-Request" class="headerlink" title="ServletRequest(Request)"></a>ServletRequest(Request)</h1><h2 id="Request工作原理"><a href="#Request工作原理" class="headerlink" title="Request工作原理"></a>Request工作原理</h2><p>客户端发送http请求后，tomcat会自动将请求的资源信息封装成一个request对象。</p>
+<h2 id="常用API-1"><a href="#常用API-1" class="headerlink" title="常用API"></a>常用API</h2><ol>
+<li>getMethod():获得请求行中的方法（GET或者POST)</li>
+<li>getRequestURI():获得请求行中的URI（项目路径）</li>
+<li>getRequestURL():获得请求行中的URL（全球路径）</li>
+<li>getContextPath():获得项目名称（如WEB_TEST01)</li>
+<li>getRemoteAddr():获得客户端的IP地址。 //客户机的IP地址在HTTP请求中，但是并没有被tomcat封装到请求行上。</li>
+<li>getHeader(name):获得请求头中某名称的值</li>
+<li>getParameter(name):获得提交（get或post都可以）的参数中为name的值，返回String</li>
+<li>getParameterMap():将参数键值对以Map<string,string[]>的方式封装，并返回。value之所以为String[]是因为一个name可能对应多个值，如radio元素与checkbox元素</string,string[]></li>
+<li>getParameterValues(name):将参数中name所对应的多个值，以String[]类型封装并返回</li>
+</ol>
+<p><strong>注意：客户端输入并发送的参数，到服务器端都是字符串的形式</strong></p>
+<h2 id="中文乱码的解决方案"><a href="#中文乱码的解决方案" class="headerlink" title="中文乱码的解决方案"></a>中文乱码的解决方案</h2><pre><code>如何编码：str.getBytes(String charSet)例:name.getBytes(&quot;iso8859-1&quot;)
+如何解码：new String(byte[],String charSet)例：new String(name.getBytes(&quot;iso8859-1&quot;),&quot;UTF-8&quot;)
+</code></pre><ol>
+<li><p>post提交方式</p>
+<p>request.setCharacterEncoding(“UTF-8”);</p>
+</li>
+<li><p>get提交方式</p>
+<p> name = new String(name.getBytes(“iso8859-1”),”UTF-8”);</p>
+</li>
+</ol>
+<p><strong>注意：第一种解决方案通常适用于表单元素（form)，因为表单的提交方式几乎都是post。而第二种解决方案通常适用于单个提交元素</strong></p>
+<h2 id="request域和转发"><a href="#request域和转发" class="headerlink" title="request域和转发"></a>request域和转发</h2><p>request与ServletContext一样，也是一个域对象。同样有setAttribute(name,value)与getAttribute(name)方法。这两个方法通常搭配<strong>转发</strong>使用：</p>
+<pre><code>RequestDispatcher dispatcher = request.getRequestDispatcher(服务器内部路径path); //创建转发器,这里的path是相对于工程目录的，通往另一个Servlet类
+dispatcher.forward(request,response);  //转发
+</code></pre><p>在转发后，仍处于当前请求中，因此仍属于当前request的作用域中，可在下一个Servlet中request.getAttribute(name)</p>
+<h2 id="转发与重定向的区别"><a href="#转发与重定向的区别" class="headerlink" title="转发与重定向的区别"></a>转发与重定向的区别</h2><ol>
+<li>重定向属于发送两次请求，转发发送一次请求</li>
+<li>重定向地址栏会发生变化，转发地址不变</li>
+<li>重新定向可以访问外部网站 转发只能访问服务器内部资源</li>
+<li>转发的性能要优于重定向</li>
+</ol>
+
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+
+      
+      
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2017/08/10/get与post的区别/" rel="next" title="get 与 post 的区别">
+                <i class="fa fa-chevron-left"></i> get 与 post 的区别
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+              <a href="/2017/11/13/git/" rel="prev" title="git 基本使用">
+                git 基本使用 <i class="fa fa-chevron-right"></i>
+              </a>
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
+
+
+          </div>
+          
+
+  
+
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap">
+            Table of Contents
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview-wrap">
+            Overview
+          </li>
+        </ul>
+      
+
+      <section class="site-overview-wrap sidebar-panel">
+        <div class="site-overview">
+          <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+            
+              <img class="site-author-image" itemprop="image"
+                src="/images/avatar.jpg"
+                alt="h#" />
+            
+              <p class="site-author-name" itemprop="name">h#</p>
+              <p class="site-description motion-element" itemprop="description">所学即所得</p>
+          </div>
+
+          
+            <nav class="site-state motion-element">
+              
+                <div class="site-state-item site-state-posts">
+                
+                  <a href="/archives/">
+                
+                    <span class="site-state-item-count">8</span>
+                    <span class="site-state-item-name">posts</span>
+                  </a>
+                </div>
+              
+
+              
+                
+                
+                <div class="site-state-item site-state-categories">
+                  <a href="/categories/index.html">
+                    
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                    <span class="site-state-item-count">4</span>
+                    <span class="site-state-item-name">categories</span>
+                  </a>
+                </div>
+              
+
+              
+            </nav>
+          
+
+          
+
+          
+
+          
+          
+
+          
+          
+
+          
+            
+          
+          
+
+        </div>
+      </section>
+
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#Servlet接口"><span class="nav-number">1.</span> <span class="nav-text">Servlet接口</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#web-xml相关配置"><span class="nav-number">2.</span> <span class="nav-text">web.xml相关配置</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#目录相关"><span class="nav-number">3.</span> <span class="nav-text">目录相关</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#基本编写步骤"><span class="nav-number">4.</span> <span class="nav-text">基本编写步骤</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#ServletConfig"><span class="nav-number">5.</span> <span class="nav-text">ServletConfig</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#ServletContext"><span class="nav-number">6.</span> <span class="nav-text">ServletContext</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#对整个web项目设置初始化数据"><span class="nav-number">6.1.</span> <span class="nav-text">对整个web项目设置初始化数据</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#可以在多个servlet之间共享数据-重要"><span class="nav-number">6.2.</span> <span class="nav-text">可以在多个servlet之间共享数据(重要)</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#可以获得当前web项目中的指定资源-文件-重要"><span class="nav-number">6.3.</span> <span class="nav-text">可以获得当前web项目中的指定资源(文件)(重要)</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#ServletResponse-Response"><span class="nav-number">7.</span> <span class="nav-text">ServletResponse(Response)</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#Response工作原理"><span class="nav-number">7.1.</span> <span class="nav-text">Response工作原理</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#常用API"><span class="nav-number">7.2.</span> <span class="nav-text">常用API</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#下载文件"><span class="nav-number">7.3.</span> <span class="nav-text">下载文件</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#验证码"><span class="nav-number">7.4.</span> <span class="nav-text">验证码</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#ServletRequest-Request"><span class="nav-number">8.</span> <span class="nav-text">ServletRequest(Request)</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#Request工作原理"><span class="nav-number">8.1.</span> <span class="nav-text">Request工作原理</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#常用API-1"><span class="nav-number">8.2.</span> <span class="nav-text">常用API</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#中文乱码的解决方案"><span class="nav-number">8.3.</span> <span class="nav-text">中文乱码的解决方案</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#request域和转发"><span class="nav-number">8.4.</span> <span class="nav-text">request域和转发</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#转发与重定向的区别"><span class="nav-number">8.5.</span> <span class="nav-text">转发与重定向的区别</span></a></li></ol></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
+      
+
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright">&copy; <span itemprop="copyrightYear">2018</span>
+  <span class="with-love">
+    <i class="fa fa-user"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">h#</span>
+
+  
+
+  
+</div>
+
+
+
+
+  <div class="powered-by">Powered by <a class="theme-link" target="_blank" href="https://hexo.io">Hexo</a></div>
+
+
+
+  <span class="post-meta-divider">|</span>
+
+
+
+  <div class="theme-info">Theme &mdash; <a class="theme-link" target="_blank" href="https://github.com/theme-next/hexo-theme-next">NexT.Gemini</a> v6.0.3</div>
+
+
+
+
+        
+
+
+
+
+
+
+
+        
+      </div>
+    </footer>
+
+    
+      <div class="back-to-top">
+        <i class="fa fa-arrow-up"></i>
+        
+      </div>
+    
+
+    
+
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery/index.js?v=2.1.3"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+  
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=6.0.3"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=6.0.3"></script>
+
+
+
+  
+  
+
+
+  <script type="text/javascript" src="/js/src/affix.js?v=6.0.3"></script>
+
+  <script type="text/javascript" src="/js/src/schemes/pisces.js?v=6.0.3"></script>
+
+
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=6.0.3"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=6.0.3"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=6.0.3"></script>
+
+
+
+  
+
+
+
+	
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+  
+
+  
+
+  
+
+  
+  
+
+  
+
+  
+
+  
+
+  
+
+</body>
+</html>

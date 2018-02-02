@@ -1,0 +1,849 @@
+<!DOCTYPE html>
+
+
+
+  
+
+
+<html class="theme-next gemini use-motion" lang="zh-Hans">
+<head>
+  <meta charset="UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+<meta name="theme-color" content="#222">
+
+
+
+
+
+
+
+
+
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css" />
+
+<link href="/css/main.css?v=6.0.3" rel="stylesheet" type="text/css" />
+
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png?v=6.0.3">
+
+
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png?v=6.0.3">
+
+
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png?v=6.0.3">
+
+
+  <link rel="mask-icon" href="/images/logo.svg?v=6.0.3" color="#222">
+
+
+
+
+
+
+
+
+
+<script type="text/javascript" id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Gemini',
+    version: '6.0.3',
+    sidebar: {"position":"left","display":"post","offset":12,"b2t":false,"scrollpercent":false,"onmobile":false},
+    fancybox: false,
+    fastclick: false,
+    lazyload: false,
+    tabs: true,
+    motion: {"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+  
+
+
+
+
+  
+  <meta name="keywords" content="Hexo, NexT" />
+
+
+<meta name="description" content="mybatis架构 核心配置文件：SqlMapConfig.xml 数据库映射文件：MapperN.xml 由xml文件产生SqlSessionFactory SqlSessionFactory产生SqlSession 调用SqlSession中的Executor 调用Executor中的MappedStatement存储sql语句的各字段成分 再返回来由Executor执行  5-7是底层">
+<meta property="og:type" content="article">
+<meta property="og:title" content="mybatis">
+<meta property="og:url" content="http://yoursite.com/2017/11/17/mybatis/index.html">
+<meta property="og:site_name" content="learningByDoing">
+<meta property="og:description" content="mybatis架构 核心配置文件：SqlMapConfig.xml 数据库映射文件：MapperN.xml 由xml文件产生SqlSessionFactory SqlSessionFactory产生SqlSession 调用SqlSession中的Executor 调用Executor中的MappedStatement存储sql语句的各字段成分 再返回来由Executor执行  5-7是底层">
+<meta property="og:locale" content="zh-Hans">
+<meta property="og:updated_time" content="2018-02-02T13:22:55.000Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="mybatis">
+<meta name="twitter:description" content="mybatis架构 核心配置文件：SqlMapConfig.xml 数据库映射文件：MapperN.xml 由xml文件产生SqlSessionFactory SqlSessionFactory产生SqlSession 调用SqlSession中的Executor 调用Executor中的MappedStatement存储sql语句的各字段成分 再返回来由Executor执行  5-7是底层">
+
+
+
+
+
+
+  <link rel="canonical" href="http://yoursite.com/2017/11/17/mybatis/"/>
+
+
+
+<script type="text/javascript" id="page.configurations">
+  CONFIG.page = {
+    sidebar: "",
+  };
+</script>
+  <title>mybatis | learningByDoing</title>
+  
+
+
+
+
+
+
+
+
+
+  <noscript>
+  <style type="text/css">
+    .use-motion .motion-element,
+    .use-motion .brand,
+    .use-motion .menu-item,
+    .sidebar-inner,
+    .use-motion .post-block,
+    .use-motion .pagination,
+    .use-motion .comments,
+    .use-motion .post-header,
+    .use-motion .post-body,
+    .use-motion .collection-title { opacity: initial; }
+
+    .use-motion .logo,
+    .use-motion .site-title,
+    .use-motion .site-subtitle {
+      opacity: initial;
+      top: initial;
+    }
+
+    .use-motion {
+      .logo-line-before i { left: initial; }
+      .logo-line-after i { right: initial; }
+    }
+  </style>
+</noscript>
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="zh-Hans">
+
+  
+  
+    
+  
+
+  <div class="container sidebar-position-left page-post-detail">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"> <div class="site-brand-wrapper">
+  <div class="site-meta ">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/"  class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">learningByDoing</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+      
+        <p class="site-subtitle"></p>
+      
+  </div>
+
+  <div class="site-nav-toggle">
+    <button>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/" rel="section">
+            <i class="menu-item-icon fa fa-fw fa-home"></i> <br />Home</a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-categories">
+          <a href="/categories/" rel="section">
+            <i class="menu-item-icon fa fa-fw fa-th"></i> <br />Categories</a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives/" rel="section">
+            <i class="menu-item-icon fa fa-fw fa-archive"></i> <br />Archives</a>
+        </li>
+      
+
+      
+    </ul>
+  
+
+  
+</nav>
+
+
+  
+
+
+
+ </div>
+    </header>
+
+    
+
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2017/11/17/mybatis/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="h#">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/avatar.jpg">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="learningByDoing">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">mybatis</h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">Posted on</span>
+              
+              <time title="Post created" itemprop="dateCreated datePublished" datetime="2017-11-17T00:00:00+08:00">2017-11-17</time>
+            
+
+            
+            
+
+            
+          </span>
+
+          
+            <span class="post-category" >
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">In</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing"><a href="/categories/JavaWeb基础/" itemprop="url" rel="index"><span itemprop="name">JavaWeb基础</span></a></span>
+
+                
+                
+                  , 
+                
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing"><a href="/categories/JavaWeb基础/SSM框架/" itemprop="url" rel="index"><span itemprop="name">SSM框架</span></a></span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <h1 id="mybatis架构"><a href="#mybatis架构" class="headerlink" title="mybatis架构"></a>mybatis架构</h1><ol>
+<li>核心配置文件：SqlMapConfig.xml</li>
+<li>数据库映射文件：MapperN.xml</li>
+<li>由xml文件产生SqlSessionFactory</li>
+<li>SqlSessionFactory产生SqlSession</li>
+<li>调用SqlSession中的Executor</li>
+<li>调用Executor中的MappedStatement存储sql语句的各字段成分</li>
+<li>再返回来由Executor执行</li>
+</ol>
+<p>5-7是底层</p>
+<h1 id="框架搭建"><a href="#框架搭建" class="headerlink" title="框架搭建"></a>框架搭建</h1><ol>
+<li><p>导包</p>
+</li>
+<li><p>创建SqlMapConfig.xml并赋予dtd约束</p>
+</li>
+<li><p>创建log4j.properties</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"># Global logging configuration</span><br><span class="line">log4j.rootLogger=DEBUG, stdout</span><br><span class="line"># Console output...</span><br><span class="line">log4j.appender.stdout=org.apache.log4j.ConsoleAppender</span><br><span class="line">log4j.appender.stdout.layout=org.apache.log4j.PatternLayout</span><br><span class="line">log4j.appender.stdout.layout.ConversionPattern=%5p [%t] - %m%n</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>创建mapper包，里面写动态代理实现Dao层的Mapper接口与对应的Mapper.xml，赋予dtd约束并告知SqlMapConfig.xml，注意两者的前缀要一致。</p>
+<figure class="highlight html"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="tag">&lt;<span class="name">mappers</span>&gt;</span></span><br><span class="line">  <span class="comment">&lt;!-- 指定Mapper.xml的包名</span></span><br><span class="line"><span class="comment">	   将各个pojo的Mapper.xml放在mapper包下，mybatis会自动注册包下的所有mapper接口，并将包下名称前缀相同的mapper接口与xml关联在一起。如UserMapper.java与UserMapper.xml</span></span><br><span class="line"><span class="comment">  --&gt;</span></span><br><span class="line">  <span class="tag">&lt;<span class="name">package</span> <span class="attr">name</span>=<span class="string">"mapper"</span>/&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">mappers</span>&gt;</span></span><br></pre></td></tr></table></figure>
+<h1 id="基本代码"><a href="#基本代码" class="headerlink" title="基本代码"></a>基本代码</h1></li>
+</ol>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">//读取配置文件</span></span><br><span class="line">String resource = <span class="string">"classpath:SqlMapConfig.xml"</span>;</span><br><span class="line">InputStream in = Resources.getResourceAsStream(resource);</span><br><span class="line"></span><br><span class="line"><span class="comment">//SqlSessionFactoryBuilder   build   sqlSessionFactory</span></span><br><span class="line">SqlSessionFactory sqlSessionFactory = <span class="keyword">new</span> SqlSessionFactoryBuilder().build(in);</span><br><span class="line"></span><br><span class="line"><span class="comment">//SqlSessionFactory产生SqlSession</span></span><br><span class="line">SqlSession session = sqlSessionFactory.openSession();</span><br><span class="line"></span><br><span class="line"><span class="comment">//SqlSession与数据库交互</span></span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="comment">//手动提交事务</span></span><br><span class="line">session.commit();</span><br></pre></td></tr></table></figure>
+<h1 id="数据库交互代码"><a href="#数据库交互代码" class="headerlink" title="数据库交互代码"></a>数据库交互代码</h1><h2 id="查询（单个）（底层）"><a href="#查询（单个）（底层）" class="headerlink" title="查询（单个）（底层）"></a>查询（单个）（底层）</h2><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">User user = session.selectOne(<span class="string">"test.getUserById"</span>, <span class="number">1</span>);</span><br><span class="line"><span class="comment">// 第一个参数是User.xml的statement的id，第二个参数是执行sql需要的参数；</span></span><br></pre></td></tr></table></figure>
+<p>Mapper.xml配置如下：</p>
+<figure class="highlight html"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="tag">&lt;<span class="name">mapper</span> <span class="attr">namespace</span>=<span class="string">"test"</span>&gt;</span></span><br><span class="line">	<span class="tag">&lt;<span class="name">select</span> <span class="attr">id</span>=<span class="string">"getUserById"</span> <span class="attr">parameterType</span>=<span class="string">"Integer"</span> <span class="attr">resultType</span>=<span class="string">"pojo.User"</span>&gt;</span></span><br><span class="line">      	<span class="comment">&lt;!-- #&#123;v&#125;为占位符？ 其中，大括号内可以为任意值，不一定是v--&gt;</span></span><br><span class="line">		select * from user where id = #&#123;v&#125;		</span><br><span class="line">	<span class="tag">&lt;/<span class="name">select</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">mapper</span>&gt;</span></span><br></pre></td></tr></table></figure>
+<h2 id="查询（多个）（底层）"><a href="#查询（多个）（底层）" class="headerlink" title="查询（多个）（底层）"></a>查询（多个）（底层）</h2><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">List&lt;Object&gt; list = session.selectList(<span class="string">"test.getUserByName"</span>, <span class="string">"王五"</span>);</span><br></pre></td></tr></table></figure>
+<p>Mapper.xml配置如下：</p>
+<figure class="highlight html"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">&lt;!-- 注意：虽然返回的是List,但是resultType还是单个User --&gt;</span></span><br><span class="line"><span class="comment">&lt;!-- 占位符是#&#123;..&#125;</span></span><br><span class="line"><span class="comment">	 而字符串拼接是'$&#123;value&#125;'，且大括号里面必须是value</span></span><br><span class="line"><span class="comment">--&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">select</span> <span class="attr">id</span>=<span class="string">"getUserByName"</span> <span class="attr">parameterType</span>=<span class="string">"String"</span> <span class="attr">resultType</span>=<span class="string">"pojo.User"</span>&gt;</span></span><br><span class="line">		select * from user where username like '%$&#123;value&#125;%'		</span><br><span class="line"><span class="tag">&lt;/<span class="name">select</span>&gt;</span></span><br></pre></td></tr></table></figure>
+<p>Mapper.xml还可如下配置：</p>
+<figure class="highlight html"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">&lt;!-- 使用#&#123;..&#125;来进行字符串拼接 --&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">select</span> <span class="attr">id</span>=<span class="string">"getUserByName"</span> <span class="attr">parameterType</span>=<span class="string">"String"</span> <span class="attr">resultType</span>=<span class="string">"pojo.User"</span>&gt;</span></span><br><span class="line">		select * from user where username like "%"#&#123;suibian&#125;"%"	</span><br><span class="line"><span class="tag">&lt;/<span class="name">select</span>&gt;</span></span><br></pre></td></tr></table></figure>
+<h2 id="增（底层）"><a href="#增（底层）" class="headerlink" title="增（底层）"></a>增（底层）</h2><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">session.insert(<span class="string">"test.insertUser"</span>, user);</span><br><span class="line"></span><br><span class="line"><span class="comment">//插入后自动返回相应id到user中</span></span><br><span class="line">syso(user.getId())</span><br></pre></td></tr></table></figure>
+<p>Mapper.xml配置如下：</p>
+<figure class="highlight html"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line"><span class="tag">&lt;<span class="name">insert</span> <span class="attr">id</span>=<span class="string">"insertUser"</span> <span class="attr">parameterType</span>=<span class="string">"pojo.User"</span>&gt;</span></span><br><span class="line"><span class="comment">&lt;!-- 使用selectKey元素，可以在插入后返回数据库中相应的某字段到user中 </span></span><br><span class="line"><span class="comment">		keyProperty为属性值</span></span><br><span class="line"><span class="comment">		resultType为返回类型</span></span><br><span class="line"><span class="comment">		order指在mysql中自动生成的id，是在其它字段插入完成后再自动生成</span></span><br><span class="line"><span class="comment">--&gt;</span></span><br><span class="line"> 	<span class="tag">&lt;<span class="name">selectKey</span> <span class="attr">keyProperty</span>=<span class="string">"id"</span> <span class="attr">resultType</span>=<span class="string">"Integer"</span> <span class="attr">order</span>=<span class="string">"AFTER"</span>&gt;</span></span><br><span class="line">			select LAST_INSERT_ID()</span><br><span class="line">	<span class="tag">&lt;/<span class="name">selectKey</span>&gt;</span></span><br><span class="line">		insert into user(username, sex, birthday, address) values(#&#123;username&#125;, #&#123;sex&#125;, #&#123;birthday&#125;, #&#123;address&#125;)</span><br><span class="line"><span class="tag">&lt;/<span class="name">insert</span>&gt;</span></span><br></pre></td></tr></table></figure>
+<h2 id="删（底层）"><a href="#删（底层）" class="headerlink" title="删（底层）"></a>删（底层）</h2><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">session.delete(<span class="string">"test.deleteUserById"</span>, <span class="number">27</span>);</span><br></pre></td></tr></table></figure>
+<p>Mapper.xml配置如下：</p>
+<figure class="highlight html"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="tag">&lt;<span class="name">delete</span> <span class="attr">id</span>=<span class="string">"deleteUserById"</span> <span class="attr">parameterType</span>=<span class="string">"Integer"</span>&gt;</span></span><br><span class="line">		delete from user where id = #&#123;id&#125;</span><br><span class="line"><span class="tag">&lt;/<span class="name">delete</span>&gt;</span></span><br></pre></td></tr></table></figure>
+<h2 id="改（底层）"><a href="#改（底层）" class="headerlink" title="改（底层）"></a>改（底层）</h2><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">session.update(<span class="string">"test.updateUserById"</span>, user);</span><br></pre></td></tr></table></figure>
+<p>Mapper.xml配置如下：</p>
+<figure class="highlight html"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="tag">&lt;<span class="name">update</span> <span class="attr">id</span>=<span class="string">"updateUserById"</span> <span class="attr">parameterType</span>=<span class="string">"pojo.User"</span>&gt;</span></span><br><span class="line">		update user set username=#&#123;username&#125;, sex=#&#123;sex&#125;, birthday=#&#123;birthday&#125;, address=#&#123;address&#125; where id = #&#123;id&#125;</span><br><span class="line"><span class="tag">&lt;/<span class="name">update</span>&gt;</span></span><br></pre></td></tr></table></figure>
+<h1 id="mybatis与hibernate的不同"><a href="#mybatis与hibernate的不同" class="headerlink" title="mybatis与hibernate的不同"></a>mybatis与hibernate的不同</h1><ol>
+<li>mybatis不完全是ORM框架，因为它要自己写SQL语句</li>
+<li>mybatis比较简单，但无法做到数据库无关性，即没有数据库方言选项，一旦从mysql变成了oracle,它的sql语句就要变化。</li>
+<li>mybatis适合对关系数据模型要求不高的软件开发</li>
+</ol>
+<h1 id="Dao层动态代理开发"><a href="#Dao层动态代理开发" class="headerlink" title="Dao层动态代理开发"></a>Dao层动态代理开发</h1><h2 id="Mapper接口"><a href="#Mapper接口" class="headerlink" title="Mapper接口"></a>Mapper接口</h2><p>只写一个接口，取代以前Dao和DaoImpl</p>
+<p>遵循四个原则：</p>
+<ol>
+<li><p>Mapper.xml的命名空间是此接口的完整类名</p>
+<figure class="highlight html"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="tag">&lt;<span class="name">mapper</span> <span class="attr">namespace</span>=<span class="string">"mapper.UserMapper"</span>&gt;</span><span class="tag">&lt;/<span class="name">mapper</span>&gt;</span></span><br><span class="line"></span><br><span class="line">这样，接口的实现类在执行方法时就会到这里来寻找对应的操作。</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>方法名与Mapper.xml中操作的id保持一致</p>
+</li>
+<li><p>方法的返回值与Mapper.xml中操作的resultType保持一致</p>
+</li>
+<li><p>方法的入参要与Mapper.xml中操作的parameterType保持一致</p>
+</li>
+</ol>
+<p><strong>注意：</strong>SqlSession执行selectOne还是selectList，它会自行根据方法的返回值进行判断。</p>
+<h2 id="dao层实现"><a href="#dao层实现" class="headerlink" title="dao层实现"></a>dao层实现</h2><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">UserMapper mapper = session.getMapper(UserMapper.class);</span><br><span class="line">User user = mapper.getUserById(<span class="number">1</span>);</span><br></pre></td></tr></table></figure>
+<h2 id="具体步骤"><a href="#具体步骤" class="headerlink" title="具体步骤"></a>具体步骤</h2><ol>
+<li>session拿已有的接口创建Mapper实现类</li>
+<li>mapper实现类调用特定方法，通过sqlmap中的namespace找到对应配置文件</li>
+<li>执行与方法名相同的操作</li>
+</ol>
+<h1 id="核心配置-SqlMapConfig-xml-属性"><a href="#核心配置-SqlMapConfig-xml-属性" class="headerlink" title="核心配置(SqlMapConfig.xml)属性"></a>核心配置(SqlMapConfig.xml)属性</h1><p><strong>注意：</strong>以下属性为元素的先后顺序</p>
+<h2 id="properties"><a href="#properties" class="headerlink" title="properties"></a>properties</h2><p>读取properties配置文件</p>
+<figure class="highlight html"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="tag">&lt;<span class="name">properties</span> <span class="attr">resource</span>=<span class="string">"log4j.properties"</span>&gt;</span><span class="tag">&lt;/<span class="name">properties</span>&gt;</span></span><br></pre></td></tr></table></figure>
+<h2 id="typeAliases"><a href="#typeAliases" class="headerlink" title="typeAliases"></a>typeAliases</h2><p>设置配置文件（包括SqlMapConfig.xml与sqlmap中的User.xml）中类型的别名</p>
+<h3 id="单个类型设置"><a href="#单个类型设置" class="headerlink" title="单个类型设置"></a>单个类型设置</h3><figure class="highlight html"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="tag">&lt;<span class="name">typeAliases</span>&gt;</span></span><br><span class="line">		<span class="tag">&lt;<span class="name">typeAlias</span> <span class="attr">type</span>=<span class="string">"pojo.User"</span> <span class="attr">alias</span>=<span class="string">"User"</span>/&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">typeAliases</span>&gt;</span></span><br></pre></td></tr></table></figure>
+<p>这样的话，一个类型就要一个元素，因此推荐下面的设置</p>
+<h3 id="包设置"><a href="#包设置" class="headerlink" title="包设置"></a>包设置</h3><figure class="highlight html"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">&lt;!-- 只指定pojo包，则其中所有的pojo都会被扫描到，且其别名与类名相同</span></span><br><span class="line"><span class="comment">	 如User对应的别名是User与user</span></span><br><span class="line"><span class="comment">--&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">typeAliases</span>&gt;</span></span><br><span class="line">		<span class="tag">&lt;<span class="name">package</span> <span class="attr">name</span>=<span class="string">"pojo"</span>/&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">typeAliases</span>&gt;</span></span><br></pre></td></tr></table></figure>
+<h3 id="mappers"><a href="#mappers" class="headerlink" title="mappers"></a>mappers</h3><figure class="highlight html"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="tag">&lt;<span class="name">mappers</span>&gt;</span></span><br><span class="line">  <span class="comment">&lt;!-- 指定Mapper.xml的包名</span></span><br><span class="line"><span class="comment">	   将各个pojo的Mapper.xml放在mapper包下，mybatis会自动注册包下的所有mapper接口，并将包下名称前缀相同的mapper接口与xml关联在一起。如UserMapper.java与UserMapper.xml</span></span><br><span class="line"><span class="comment">  --&gt;</span></span><br><span class="line">  <span class="tag">&lt;<span class="name">package</span> <span class="attr">name</span>=<span class="string">"mapper"</span>/&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">mappers</span>&gt;</span></span><br></pre></td></tr></table></figure>
+<h1 id="输入参数映射之POJO包装类"><a href="#输入参数映射之POJO包装类" class="headerlink" title="输入参数映射之POJO包装类"></a>输入参数映射之POJO包装类</h1><p>假设User对象同时是某对象（如QueryVo）的成员变量，若以QueryVo对象为输入参数，则相关Mapper.xml中配置如下：</p>
+<figure class="highlight html"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="tag">&lt;<span class="name">select</span> <span class="attr">id</span>=<span class="string">"getUserByQueryVo"</span> <span class="attr">parameterType</span>=<span class="string">"pojo.QueryVo"</span> <span class="attr">resultType</span>=<span class="string">"pojo.User"</span>&gt;</span></span><br><span class="line">	select * from user where username like "%"#&#123;user.username&#125;"%"	</span><br><span class="line"><span class="tag">&lt;/<span class="name">select</span>&gt;</span></span><br></pre></td></tr></table></figure>
+<p>同时在接口中要有getUserByQueryVo对应的方法。</p>
+<h1 id="输出参数映射之resultMap"><a href="#输出参数映射之resultMap" class="headerlink" title="输出参数映射之resultMap"></a>输出参数映射之resultMap</h1><p>若pojo的属性名称与mysql的字段名称不一样，可以通过resultMap将字段名和属性名作一个对应关系，将查询结果映射为复杂类型的pojo。</p>
+<p>在Mapper.xml中如下配置</p>
+<figure class="highlight html"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">&lt;!-- select元素中的resultMap属性值要与resultMap元素的id值相同</span></span><br><span class="line"><span class="comment">	type指定pojo</span></span><br><span class="line"><span class="comment">	result元素用来指名映射，即从数据库中获得的user_id字段要放到Order类的userId属性中去</span></span><br><span class="line"><span class="comment">--&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">resultMap</span> <span class="attr">id</span>=<span class="string">"order"</span> <span class="attr">type</span>=<span class="string">"pojo.Order"</span>&gt;</span></span><br><span class="line">	<span class="tag">&lt;<span class="name">result</span> <span class="attr">property</span>=<span class="string">"userId"</span> <span class="attr">column</span>=<span class="string">"user_id"</span>/&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">resultMap</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">select</span> <span class="attr">id</span>=<span class="string">"orderList"</span> <span class="attr">resultMap</span>=<span class="string">"order"</span>&gt;</span></span><br><span class="line">	select * from orders</span><br><span class="line"><span class="tag">&lt;/<span class="name">select</span>&gt;</span></span><br></pre></td></tr></table></figure>
+<h1 id="动态sql"><a href="#动态sql" class="headerlink" title="动态sql"></a>动态sql</h1><p>设定QueryVo下有可迭代属性，如</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">private</span> Integer[] idarray;</span><br><span class="line"><span class="keyword">private</span> List&lt;Integer&gt; idlist;</span><br></pre></td></tr></table></figure>
+<p>示例：</p>
+<figure class="highlight html"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line"><span class="tag">&lt;<span class="name">select</span> <span class="attr">id</span>=<span class="string">"getUserByIds"</span> <span class="attr">parameterType</span>=<span class="string">"QueryVo"</span> <span class="attr">resultType</span>=<span class="string">"User"</span>&gt;</span></span><br><span class="line">  select * from user</span><br><span class="line">  <span class="comment">&lt;!-- where可以忽略where内部的第一个放在语句前的and --&gt;</span></span><br><span class="line">  <span class="tag">&lt;<span class="name">where</span>&gt;</span></span><br><span class="line">    id in</span><br><span class="line">  <span class="comment">&lt;!-- 使idlist中提取出来的123变成(1,2,3) --&gt;</span> </span><br><span class="line">  <span class="tag">&lt;<span class="name">foreach</span> <span class="attr">collection</span>=<span class="string">"idlist"</span> <span class="attr">item</span>=<span class="string">"id"</span> <span class="attr">separator</span>=<span class="string">","</span> <span class="attr">open</span>=<span class="string">"("</span> <span class="attr">close</span>=<span class="string">")"</span>&gt;</span></span><br><span class="line">    <span class="comment">&lt;!-- if标签必须要有test属性 --&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">if</span> <span class="attr">test</span>=<span class="string">"id &gt;=10"</span>&gt;</span></span><br><span class="line">		#&#123;id&#125;</span><br><span class="line">	<span class="tag">&lt;/<span class="name">if</span>&gt;</span></span><br><span class="line">  <span class="tag">&lt;/<span class="name">foreach</span>&gt;</span></span><br><span class="line">  <span class="tag">&lt;/<span class="name">where</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">select</span>&gt;</span></span><br></pre></td></tr></table></figure>
+<p>若输入参数不为QueryVo，而是直接将集合或者数组放入，则parameterType应为Integer, collection应固定为list或者array，否则会报错。</p>
+<figure class="highlight html"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"><span class="tag">&lt;<span class="name">select</span> <span class="attr">id</span>=<span class="string">"getUserByIds"</span> <span class="attr">parameterType</span>=<span class="string">"Integer"</span> <span class="attr">resultType</span>=<span class="string">"User"</span>&gt;</span></span><br><span class="line">		select * from user</span><br><span class="line">			<span class="tag">&lt;<span class="name">where</span>&gt;</span></span><br><span class="line">				id in</span><br><span class="line">				<span class="tag">&lt;<span class="name">foreach</span> <span class="attr">collection</span>=<span class="string">"list"</span> <span class="attr">item</span>=<span class="string">"id"</span> <span class="attr">separator</span>=<span class="string">","</span> <span class="attr">open</span>=<span class="string">"("</span> <span class="attr">close</span>=<span class="string">")"</span>&gt;</span></span><br><span class="line">				#&#123;id&#125;</span><br><span class="line">				<span class="tag">&lt;/<span class="name">foreach</span>&gt;</span></span><br><span class="line">			<span class="tag">&lt;/<span class="name">where</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">select</span>&gt;</span></span><br></pre></td></tr></table></figure>
+<h1 id="一对一"><a href="#一对一" class="headerlink" title="一对一"></a>一对一</h1><p>一对一的情况即一个pojo中对应另一个pojo对象，此处以Order对应一个User为例</p>
+<p>Mapper.xml配置如下：</p>
+<figure class="highlight html"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">&lt;!-- resultMap中，主键元素，即id元素可以不进行映射 --&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">resultMap</span> <span class="attr">id</span>=<span class="string">"orders"</span> <span class="attr">type</span>=<span class="string">"pojo.Order"</span>&gt;</span></span><br><span class="line">  <span class="comment">&lt;!-- &lt;id property="id" column="id"/&gt; --&gt;</span></span><br><span class="line">  <span class="tag">&lt;<span class="name">result</span> <span class="attr">property</span>=<span class="string">"userId"</span> <span class="attr">column</span>=<span class="string">"user_id"</span>/&gt;</span></span><br><span class="line">  <span class="comment">&lt;!-- 一对一标签association，对象属性的javaType不可以省略 --&gt;</span></span><br><span class="line">  <span class="tag">&lt;<span class="name">association</span> <span class="attr">property</span>=<span class="string">"user"</span> <span class="attr">javaType</span>=<span class="string">"User"</span>&gt;</span></span><br><span class="line">    <span class="comment">&lt;!-- &lt;id property="id" column="id"/&gt; --&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">result</span> <span class="attr">property</span>=<span class="string">"username"</span> <span class="attr">column</span>=<span class="string">"username"</span>/&gt;</span></span><br><span class="line">  <span class="tag">&lt;/<span class="name">association</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">resultMap</span>&gt;</span></span><br><span class="line"></span><br><span class="line"><span class="tag">&lt;<span class="name">select</span> <span class="attr">id</span>=<span class="string">"getOrderList"</span> <span class="attr">resultMap</span>=<span class="string">"orders"</span>&gt;</span></span><br><span class="line">  select o.id, o.user_id, o.number, o.createtime, o.note, u.username from orders o left join user u on o.user_id = u.id</span><br><span class="line"><span class="tag">&lt;/<span class="name">select</span>&gt;</span></span><br></pre></td></tr></table></figure>
+<h1 id="一对多"><a href="#一对多" class="headerlink" title="一对多"></a>一对多</h1><p>一对多的情况即一个pojo中对应另一个pojo的集合，此处以User对应多个Order为例</p>
+<p>Mapper.xml配置如下：</p>
+<figure class="highlight html"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line"><span class="tag">&lt;<span class="name">resultMap</span> <span class="attr">type</span>=<span class="string">"User"</span> <span class="attr">id</span>=<span class="string">"user"</span>&gt;</span></span><br><span class="line">  <span class="comment">&lt;!-- 同样，主键元素可以不映射 --&gt;</span></span><br><span class="line">  <span class="tag">&lt;<span class="name">result</span> <span class="attr">property</span>=<span class="string">"username"</span> <span class="attr">column</span>=<span class="string">"username"</span>/&gt;</span></span><br><span class="line">  <span class="comment">&lt;!-- 一对多标签collection，javaType代表集合类型，ofType代表集合泛型 --&gt;</span></span><br><span class="line">  <span class="tag">&lt;<span class="name">collection</span> <span class="attr">property</span>=<span class="string">"orders"</span> <span class="attr">javaType</span>=<span class="string">"List"</span> <span class="attr">ofType</span>=<span class="string">"Order"</span> &gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">result</span> <span class="attr">property</span>=<span class="string">"number"</span> <span class="attr">column</span>=<span class="string">"number"</span>/&gt;</span></span><br><span class="line">  <span class="tag">&lt;/<span class="name">collection</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">resultMap</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">select</span> <span class="attr">id</span>=<span class="string">"getUserById"</span> <span class="attr">parameterType</span>=<span class="string">"Integer"</span> <span class="attr">resultMap</span>=<span class="string">"user"</span>&gt;</span></span><br><span class="line">  select u.id, u.username, u.birthday, u.address, u.sex, o.number from user u left join orders o on o.user_id = u.id</span><br><span class="line">  where</span><br><span class="line">  u.id = #&#123;id&#125;		</span><br><span class="line"><span class="tag">&lt;/<span class="name">select</span>&gt;</span></span><br></pre></td></tr></table></figure>
+<h1 id="mybatis整合spring"><a href="#mybatis整合spring" class="headerlink" title="mybatis整合spring"></a>mybatis整合spring</h1><h2 id="整合思路"><a href="#整合思路" class="headerlink" title="整合思路"></a>整合思路</h2><p>1、SqlSessionFactory对象应该放到spring容器中作为单例存在。</p>
+<p>2、传统dao的开发方式中，应该从spring容器中获得sqlsession对象。</p>
+<p>3、Mapper代理形式中，应该从spring容器中直接获得mapper的代理对象。</p>
+<p>4、数据库的连接以及数据库连接池事务管理都交给spring容器来完成。</p>
+<h2 id="原始dao开发"><a href="#原始dao开发" class="headerlink" title="原始dao开发"></a>原始dao开发</h2><p>applicationContext.xml中配置数据源连接池、sqlSessionFactory，并将sqlSessionFactory赋予dao实现类。</p>
+<figure class="highlight html"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">&lt;!-- 配置数据源连接池 --&gt;</span>	 </span><br><span class="line"><span class="tag">&lt;<span class="name">context:property-placeholder</span> <span class="attr">location</span>=<span class="string">"classpath:db.properties"</span>/&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">bean</span> <span class="attr">id</span>=<span class="string">"dataSource"</span> <span class="attr">class</span>=<span class="string">"org.apache.commons.dbcp.BasicDataSource"</span></span></span><br><span class="line"><span class="tag">      <span class="attr">destroy-method</span>=<span class="string">"close"</span>&gt;</span></span><br><span class="line">  <span class="tag">&lt;<span class="name">property</span> <span class="attr">name</span>=<span class="string">"driverClassName"</span> <span class="attr">value</span>=<span class="string">"$&#123;jdbc.driver&#125;"</span> /&gt;</span></span><br><span class="line">  <span class="tag">&lt;<span class="name">property</span> <span class="attr">name</span>=<span class="string">"url"</span> <span class="attr">value</span>=<span class="string">"$&#123;jdbc.url&#125;"</span> /&gt;</span></span><br><span class="line">  <span class="tag">&lt;<span class="name">property</span> <span class="attr">name</span>=<span class="string">"username"</span> <span class="attr">value</span>=<span class="string">"$&#123;jdbc.username&#125;"</span> /&gt;</span></span><br><span class="line">  <span class="tag">&lt;<span class="name">property</span> <span class="attr">name</span>=<span class="string">"password"</span> <span class="attr">value</span>=<span class="string">"$&#123;jdbc.password&#125;"</span> /&gt;</span></span><br><span class="line">  <span class="tag">&lt;<span class="name">property</span> <span class="attr">name</span>=<span class="string">"maxActive"</span> <span class="attr">value</span>=<span class="string">"10"</span> /&gt;</span></span><br><span class="line">  <span class="tag">&lt;<span class="name">property</span> <span class="attr">name</span>=<span class="string">"maxIdle"</span> <span class="attr">value</span>=<span class="string">"5"</span> /&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">bean</span>&gt;</span></span><br><span class="line"></span><br><span class="line"><span class="comment">&lt;!-- 配置SqlSessionFactory --&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">bean</span> <span class="attr">id</span>=<span class="string">"sqlSessionFactory"</span> <span class="attr">class</span>=<span class="string">"org.mybatis.spring.SqlSessionFactoryBean"</span>&gt;</span></span><br><span class="line">  <span class="tag">&lt;<span class="name">property</span> <span class="attr">name</span>=<span class="string">"dataSource"</span> <span class="attr">ref</span>=<span class="string">"dataSource"</span>&gt;</span><span class="tag">&lt;/<span class="name">property</span>&gt;</span></span><br><span class="line">  <span class="tag">&lt;<span class="name">property</span> <span class="attr">name</span>=<span class="string">"configLocation"</span> <span class="attr">value</span>=<span class="string">"classpath:SqlMapConfig.xml"</span>&gt;</span><span class="tag">&lt;/<span class="name">property</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">bean</span>&gt;</span></span><br><span class="line"></span><br><span class="line"><span class="comment">&lt;!-- 配置dao层 --&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">bean</span> <span class="attr">id</span>=<span class="string">"userDao"</span> <span class="attr">class</span>=<span class="string">"dao.UserDaoImpl"</span>&gt;</span></span><br><span class="line">  <span class="tag">&lt;<span class="name">property</span> <span class="attr">name</span>=<span class="string">"sqlSessionFactory"</span> <span class="attr">ref</span>=<span class="string">"sqlSessionFactory"</span>&gt;</span><span class="tag">&lt;/<span class="name">property</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">bean</span>&gt;</span></span><br></pre></td></tr></table></figure>
+<p>dao实现类继承SqlSessionDaoSupport类，便能直接得到sqlSession</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">UserDaoImpl</span> <span class="keyword">extends</span> <span class="title">SqlSessionDaoSupport</span> <span class="keyword">implements</span> <span class="title">UserDao</span></span>&#123;</span><br><span class="line"></span><br><span class="line">	<span class="meta">@Override</span></span><br><span class="line">	<span class="function"><span class="keyword">public</span> User <span class="title">getUserById</span><span class="params">(Integer id)</span> </span>&#123;</span><br><span class="line">     	SqlSession sqlSession = <span class="keyword">this</span>.getSqlSession();</span><br><span class="line">		<span class="keyword">return</span> <span class="keyword">null</span>;</span><br><span class="line">	&#125;</span><br><span class="line"></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<h2 id="mapper动态代理开发"><a href="#mapper动态代理开发" class="headerlink" title="mapper动态代理开发"></a>mapper动态代理开发</h2><p>从代码上来看</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">SqlSession sqlSession = sqlSessionFactory.openSession();	</span><br><span class="line">UserMapper mapper = sqlSession.getMapper(UserMapper.class);</span><br></pre></td></tr></table></figure>
+<p>mapper的获取方式是：mybatis-spring就会用MapperFactoryBean即Mapper工厂来生成相应的mapper。而生成相应的mapper需要两个条件，一是sqlSessionFactory，用来生成sqlSession；二是Mapper接口用来指定Mapper的类型。配置如下</p>
+<figure class="highlight html"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">&lt;!-- 配置userMapper --&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">bean</span> <span class="attr">id</span>=<span class="string">"userMapper"</span> <span class="attr">class</span>=<span class="string">"org.mybatis.spring.mapper.MapperFactoryBean"</span>&gt;</span></span><br><span class="line">  <span class="tag">&lt;<span class="name">property</span> <span class="attr">name</span>=<span class="string">"sqlSessionFactory"</span> <span class="attr">ref</span>=<span class="string">"sqlSessionFactory"</span>&gt;</span><span class="tag">&lt;/<span class="name">property</span>&gt;</span></span><br><span class="line">  <span class="tag">&lt;<span class="name">property</span> <span class="attr">name</span>=<span class="string">"mapperInterface"</span> <span class="attr">value</span>=<span class="string">"mapper.UserMapper"</span>&gt;</span><span class="tag">&lt;/<span class="name">property</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">bean</span>&gt;</span></span><br></pre></td></tr></table></figure>
+<p>其实就是用配置来封装了上面的两行代码。这样便可直接通过<code>getBean(&quot;userMapper&quot;)来获取到Mapper</code></p>
+<h3 id="动态代理扫描开发"><a href="#动态代理扫描开发" class="headerlink" title="动态代理扫描开发"></a>动态代理扫描开发</h3><p>若一个业务一个mapper接口，则上面的配置就会有许多冗余。mybatis-spring提供MapperScannerConfigurer类，可以用来扫描指定的基本包下的所有mapper接口，并且不用有id，因为它是在基本包中查找。不用在其中配置SqlSessionFactory，它会自动在容器中找到。</p>
+<figure class="highlight html"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">&lt;!-- Mapper动态代理扫描开发 --&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">bean</span> <span class="attr">class</span>=<span class="string">"org.mybatis.spring.mapper.MapperScannerConfigurer"</span>&gt;</span></span><br><span class="line">	<span class="comment">&lt;!-- 扫描mapper基本包下的所有mapper接口 --&gt;</span>	</span><br><span class="line">  	<span class="tag">&lt;<span class="name">property</span> <span class="attr">name</span>=<span class="string">"basePackage"</span> <span class="attr">value</span>=<span class="string">"mappper"</span>&gt;</span><span class="tag">&lt;/<span class="name">property</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">bean</span>&gt;</span></span><br></pre></td></tr></table></figure>
+<p>但这种情况的Dao层，不能用名称来获取Bean，而是用class。</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">@Test</span></span><br><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">test6</span><span class="params">()</span> <span class="keyword">throws</span> Exception </span>&#123;</span><br><span class="line">  ApplicationContext ac =<span class="keyword">new</span> ClassPathXmlApplicationContext(<span class="string">"applicationContext.xml"</span>);</span><br><span class="line">  <span class="comment">//spring获得UserMapper.class后，便知道了包名，就会在包下扫描到UserMapper接口</span></span><br><span class="line">  UserMapper userMapper = ac.getBean(UserMapper.class);</span><br><span class="line">  User user = userMapper.getUserById(<span class="number">1</span>);</span><br><span class="line">  System.out.println(user);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+
+      
+      
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2017/11/13/git/" rel="next" title="git 基本使用">
+                <i class="fa fa-chevron-left"></i> git 基本使用
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+              <a href="/2017/11/17/springmvc/" rel="prev" title="springmvc">
+                springmvc <i class="fa fa-chevron-right"></i>
+              </a>
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
+
+
+          </div>
+          
+
+  
+
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap">
+            Table of Contents
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview-wrap">
+            Overview
+          </li>
+        </ul>
+      
+
+      <section class="site-overview-wrap sidebar-panel">
+        <div class="site-overview">
+          <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+            
+              <img class="site-author-image" itemprop="image"
+                src="/images/avatar.jpg"
+                alt="h#" />
+            
+              <p class="site-author-name" itemprop="name">h#</p>
+              <p class="site-description motion-element" itemprop="description">所学即所得</p>
+          </div>
+
+          
+            <nav class="site-state motion-element">
+              
+                <div class="site-state-item site-state-posts">
+                
+                  <a href="/archives/">
+                
+                    <span class="site-state-item-count">8</span>
+                    <span class="site-state-item-name">posts</span>
+                  </a>
+                </div>
+              
+
+              
+                
+                
+                <div class="site-state-item site-state-categories">
+                  <a href="/categories/index.html">
+                    
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                    <span class="site-state-item-count">4</span>
+                    <span class="site-state-item-name">categories</span>
+                  </a>
+                </div>
+              
+
+              
+            </nav>
+          
+
+          
+
+          
+
+          
+          
+
+          
+          
+
+          
+            
+          
+          
+
+        </div>
+      </section>
+
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#mybatis架构"><span class="nav-number">1.</span> <span class="nav-text">mybatis架构</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#框架搭建"><span class="nav-number">2.</span> <span class="nav-text">框架搭建</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#基本代码"><span class="nav-number">3.</span> <span class="nav-text">基本代码</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#数据库交互代码"><span class="nav-number">4.</span> <span class="nav-text">数据库交互代码</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#查询（单个）（底层）"><span class="nav-number">4.1.</span> <span class="nav-text">查询（单个）（底层）</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#查询（多个）（底层）"><span class="nav-number">4.2.</span> <span class="nav-text">查询（多个）（底层）</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#增（底层）"><span class="nav-number">4.3.</span> <span class="nav-text">增（底层）</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#删（底层）"><span class="nav-number">4.4.</span> <span class="nav-text">删（底层）</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#改（底层）"><span class="nav-number">4.5.</span> <span class="nav-text">改（底层）</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#mybatis与hibernate的不同"><span class="nav-number">5.</span> <span class="nav-text">mybatis与hibernate的不同</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#Dao层动态代理开发"><span class="nav-number">6.</span> <span class="nav-text">Dao层动态代理开发</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#Mapper接口"><span class="nav-number">6.1.</span> <span class="nav-text">Mapper接口</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#dao层实现"><span class="nav-number">6.2.</span> <span class="nav-text">dao层实现</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#具体步骤"><span class="nav-number">6.3.</span> <span class="nav-text">具体步骤</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#核心配置-SqlMapConfig-xml-属性"><span class="nav-number">7.</span> <span class="nav-text">核心配置(SqlMapConfig.xml)属性</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#properties"><span class="nav-number">7.1.</span> <span class="nav-text">properties</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#typeAliases"><span class="nav-number">7.2.</span> <span class="nav-text">typeAliases</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#单个类型设置"><span class="nav-number">7.2.1.</span> <span class="nav-text">单个类型设置</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#包设置"><span class="nav-number">7.2.2.</span> <span class="nav-text">包设置</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#mappers"><span class="nav-number">7.2.3.</span> <span class="nav-text">mappers</span></a></li></ol></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#输入参数映射之POJO包装类"><span class="nav-number">8.</span> <span class="nav-text">输入参数映射之POJO包装类</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#输出参数映射之resultMap"><span class="nav-number">9.</span> <span class="nav-text">输出参数映射之resultMap</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#动态sql"><span class="nav-number">10.</span> <span class="nav-text">动态sql</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#一对一"><span class="nav-number">11.</span> <span class="nav-text">一对一</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#一对多"><span class="nav-number">12.</span> <span class="nav-text">一对多</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#mybatis整合spring"><span class="nav-number">13.</span> <span class="nav-text">mybatis整合spring</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#整合思路"><span class="nav-number">13.1.</span> <span class="nav-text">整合思路</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#原始dao开发"><span class="nav-number">13.2.</span> <span class="nav-text">原始dao开发</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#mapper动态代理开发"><span class="nav-number">13.3.</span> <span class="nav-text">mapper动态代理开发</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#动态代理扫描开发"><span class="nav-number">13.3.1.</span> <span class="nav-text">动态代理扫描开发</span></a></li></ol></li></ol></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
+      
+
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright">&copy; <span itemprop="copyrightYear">2018</span>
+  <span class="with-love">
+    <i class="fa fa-user"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">h#</span>
+
+  
+
+  
+</div>
+
+
+
+
+  <div class="powered-by">Powered by <a class="theme-link" target="_blank" href="https://hexo.io">Hexo</a></div>
+
+
+
+  <span class="post-meta-divider">|</span>
+
+
+
+  <div class="theme-info">Theme &mdash; <a class="theme-link" target="_blank" href="https://github.com/theme-next/hexo-theme-next">NexT.Gemini</a> v6.0.3</div>
+
+
+
+
+        
+
+
+
+
+
+
+
+        
+      </div>
+    </footer>
+
+    
+      <div class="back-to-top">
+        <i class="fa fa-arrow-up"></i>
+        
+      </div>
+    
+
+    
+
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery/index.js?v=2.1.3"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+  
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=6.0.3"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=6.0.3"></script>
+
+
+
+  
+  
+
+
+  <script type="text/javascript" src="/js/src/affix.js?v=6.0.3"></script>
+
+  <script type="text/javascript" src="/js/src/schemes/pisces.js?v=6.0.3"></script>
+
+
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=6.0.3"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=6.0.3"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=6.0.3"></script>
+
+
+
+  
+
+
+
+	
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+  
+
+  
+
+  
+
+  
+  
+
+  
+
+  
+
+  
+
+  
+
+</body>
+</html>
